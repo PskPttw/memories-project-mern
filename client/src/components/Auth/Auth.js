@@ -1,20 +1,26 @@
 import React, { useState } from "react"
+import { useDispatch } from "react-redux"
+import { useHistory } from "react-router-dom"
 import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from "@material-ui/core"
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
+import { GoogleLogin, googleLogout } from "@react-oauth/google"
 
+import { signin, signup } from "../../actions/auth"
+import { AUTH } from "../../constants/actionType"
 import Input from "./Input"
 
 import useStyle from "./styles"
 
 const Auth = () => 
 {
+  const history = useHistory()
   const classes = useStyle()
   
   const [isSignup, setIsSignup] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   
   const handleShowPassword = () => setShowPassword((prev) => !prev)
-  
+
   const handleSubmit = () =>
   {
 
@@ -25,11 +31,33 @@ const Auth = () =>
 
   }
 
+  const googleSuccess = async(res) =>
+  {
+    const result = res?.profileObj
+    const token = res?.tokenId
+
+    try
+    {
+      dispatchEvent({ type: Auth, data: { result, token } })
+
+      history.push("/")
+    }
+    catch(error)
+    {
+      console.log(error)
+    }
+
+  }
+
+  const googleError = () => alert("Google Sign In was unsuccessful. Try again later.")
+
+
   const switchMode = () =>
   {
     setIsSignup((prev) => !prev)
     handleShowPassword(false)
   }
+
   return (
     <Container component= "main" maxWidth= "xs">
       <Paper className= { classes.paper } elevation= { 3 }>
@@ -60,7 +88,10 @@ const Auth = () =>
             }
           </Grid>
           
-          
+          <GoogleLogin 
+            onSuccess= { googleSuccess }
+            onError= { googleError }
+          />
 
           <Button type= "submit" fullWidth variant= "contained" color= "primary" className= { classes.submit }>
             { isSignup ? "Sign Up" : "Sign in" }

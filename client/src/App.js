@@ -7,10 +7,12 @@ import Navbar from "./components/Navbar/Navbar"
 import Home from "./components/Home/Home"
 import Auth from "./components/Auth/Auth"
 
+require('dotenv').config()
+
 const App = () =>
 {
   return (
-    <GoogleOAuthProvider clientId= { process.env.PUBLIC_GOOGLE_API_TOKEN }>
+    <GoogleOAuthProvider clientId= { process.env.REACT_APP_GOOGLE_API_TOKEN }>
       <BrowserRouter>
         <Container maxWidth= "lg">
           <Navbar />
