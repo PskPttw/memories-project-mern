@@ -4,42 +4,60 @@ import { useHistory } from "react-router-dom"
 import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from "@material-ui/core"
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import { GoogleLogin, googleLogout } from "@react-oauth/google"
-
+import jwt_decode from "jwt-decode"
 import { signin, signup } from "../../actions/auth"
 import { AUTH } from "../../constants/actionType"
 import Input from "./Input"
 
 import useStyle from "./styles"
 
+const initialState = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "" }
+
 const Auth = () => 
 {
   const history = useHistory()
   const classes = useStyle()
-  
+  const dispatch = useDispatch()
+
   const [isSignup, setIsSignup] = useState(false)
+  const [formData, setFormData] = useState(initialState)
   const [showPassword, setShowPassword] = useState(false)
   
   const handleShowPassword = () => setShowPassword((prev) => !prev)
 
-  const handleSubmit = () =>
+  const handleSubmit = (e) =>
   {
+    e.preventDefault()
 
+    if(isSignup)
+    {
+      dispatch(signup(formData, history))
+    }
+    else
+    {
+      dispatch(signin(formData, history))
+    }
   }
 
-  const handleChange = () =>
+  const handleChange = (e) =>
   {
-
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
   const googleSuccess = async(res) =>
   {
-    const result = res?.profileObj
-    const token = res?.tokenId
+    const userObject = jwt_decode(res?.credential)
+    const { name, sub, picture } = userObject
+    const result = {
+      _id: sub,
+      _type: "user",
+      userName: name,
+      image: picture
+    }
 
     try
     {
-      dispatchEvent({ type: Auth, data: { result, token } })
-
+      dispatch({ type: AUTH, data: result })
       history.push("/")
     }
     catch(error)
@@ -74,7 +92,7 @@ const Auth = () =>
                 <>
                   <Input name= "firstName" label= "First Name" handleChange= { handleChange } autoFocus half />
 
-                  <Input name= "firstName" label= "First Name" handleChange= { handleChange } half />
+                  <Input name= "lastName" label= "Last Name" handleChange= { handleChange } half />
                 </>
               )
             }
