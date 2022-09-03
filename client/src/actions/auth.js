@@ -1,11 +1,14 @@
 import * as api from "../api"
 import { AUTH } from "../constants/actionType"
 
-export const signin = (formData, history) => async(dispatch) =>
+export const signin = (formData, router) => async(dispatch) =>
 {
   try
   {
-    history.push("/")
+    const { data } = await api.signIn(formData)
+    
+    dispatch({ type: AUTH, data })
+    router.push("/")
   } 
   catch(error)
   {
@@ -13,11 +16,15 @@ export const signin = (formData, history) => async(dispatch) =>
   }
 }
 
-export const signup = () => async(dispatch) =>
+export const signup = (formData, router) => async(dispatch) =>
 {
   try
   {
-    history.push("/")
+    const { data } = await api.signUp(formData)
+
+    dispatch({ type: AUTH, data })
+
+    router.push("/")
   }
   catch(error)
   {
