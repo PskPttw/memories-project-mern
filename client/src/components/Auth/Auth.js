@@ -50,14 +50,13 @@ const Auth = () =>
     const { name, sub, picture } = userObject
     const result = {
       _id: sub,
-      _type: "user",
-      userName: name,
+      name: name,
       image: picture
     }
 
     try
     {
-      dispatch({ type: AUTH, data: result })
+      dispatch({ type: AUTH, data: { result } })
       history.push("/")
     }
     catch(error)

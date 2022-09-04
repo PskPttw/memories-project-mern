@@ -25,6 +25,9 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
+  },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
