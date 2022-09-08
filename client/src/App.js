@@ -11,6 +11,8 @@ require('dotenv').config()
 
 const App = () =>
 {
+  const user = JSON.parse(localStorage.getItem("profile"))
+
   return (
     <GoogleOAuthProvider clientId= { process.env.REACT_APP_GOOGLE_API_TOKEN }>
       <BrowserRouter>
@@ -21,7 +23,7 @@ const App = () =>
             <Route path= "/posts" exact component= { Home } />
             <Route path= "/posts/search" exact component= { Home } />
             <Route path= "/posts/:id" component= { PostDetails } />
-            <Route path= "/auth" exact component= { Auth }/>
+            <Route path= "/auth" exact component= { () => (!user ? <Auth /> : <Redirect to= "/posts" />) }/>
           </Switch>
         </Container>
       </BrowserRouter>

@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux"
 import { useHistory, useLocation } from "react-router-dom"
 import decode from "jwt-decode"
 
-import memories from "../../images/memories.png"
+import memoriesLogo from "../../images/memories-Logo.png"
+import memoriesText from "../../images/memories-Text.png"
 
 import useStyles from "./styles"
 
@@ -17,7 +18,7 @@ const Navbar = () =>
   const dispatch = useDispatch()
   const history = useHistory()
   const location = useLocation()
-  console.log(user.token)
+
   const logout = () =>
   {
     dispatch({ type: "LOGOUT" })
@@ -45,8 +46,11 @@ const Navbar = () =>
   return (
     <AppBar className= { classes.appBar } position= "static" color= "inherit">
       <div className= { classes.brandContainer }>
-        <Typography component= { Link } to= "/" className= { classes.heading } variant= "h2" align= "center">Memories</Typography>
-        <img className= { classes.image } src= { memories } alt= "memories" height= "60"/>
+        <Link to= "/" className= { classes.brandContainer }>
+          <img src= { memoriesText } alt= "icon" height= "45px"/>
+      
+          <img className= { classes.image } src= { memoriesLogo } alt= "memories" height= "40px"/>
+        </Link>
       </div>
 
       <Toolbar className= { classes.toolbar }>
