@@ -6,11 +6,13 @@ API.interceptors.request.use((req) =>
 {
   if(localStorage.getItem("profile"))
   {
-    req.headers.Authorization = `Bearer ${ JSON.parse(localStorage.getItem("profile")).token }`
+    req.headers.authorization = `Bearer ${ JSON.parse(localStorage.getItem("profile")).token }`
   }
-
+  console.log(req)
   return req
 })
+
+export const fetchPost = (id) => API.get(`/posts/${ id }`)
 
 export const fetchPosts = (page) => API.get(`/posts?page${ page }`)
 
